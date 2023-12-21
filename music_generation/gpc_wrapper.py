@@ -37,7 +37,7 @@ class GPCWrapper:
 
         self.vertex_dictionary = {}
         self.edges_count = 0
-        self.max_voices = 0
+        self.voice_count = 0
 
     def insert_graph(self, df: pd.DataFrame):
         # Массив для передачи в gpc
@@ -79,8 +79,8 @@ class GPCWrapper:
         i = 0
         while voices[i] != 1:
             i += 1
-        if self.max_voices < i:
-            self.max_voices = i
+        if self.voice_count < i:
+            self.voice_count = i
         voices[i] = 0
         return i
 
@@ -173,11 +173,9 @@ class GPCWrapper:
                             origin_mid.tracks[0].append(Message('note_off', channel=0, note=msg, velocity=72, time=delay_for_origin))
                             mono_mid[chord[msg]].tracks[0].append(Message('note_off', channel=0, note=msg, velocity=72, time=delay[chord[msg]]))
                             free_voices[chord[msg]] = 1
-                            delay[chord[
-                                msg]] = 0  # все остальные события в этом треке для перехода между аккордами случаются в то-же время
+                            delay[chord[msg]] = 0  # все остальные события в этом треке для перехода между аккордами случаются в то-же время
                             delay_for_origin = 0
-                            last_event_time[chord[
-                                msg]] = global_time  # время последнего событие для голоса используется для следующей задержки
+                            last_event_time[chord[msg]] = global_time  # время последнего событие для голоса используется для следующей задержки
                     for msg in prev_chord:  # проходим второй раз и удаляем, т.к. может быть две ноты в разных треках
                         if msg not in current_chord and msg in chord:
                             del chord[msg]
@@ -193,7 +191,7 @@ class GPCWrapper:
             prev_chord_delay = cur_chord_delay  # текужий аккорд становится предыдущим, сохраним время его звучания
             cur_chord_delay = edge_atr  # сохраним время действия текущего аккорда
 
-        return self.edges_count, origin_mid, mono_mid
+        return self.edges_count, origin_mid, mono_mid, self.voice_count
 
     def run(self, df: pd.DataFrame, chord_count, max_voice_count):
         """ init, insert, generate and delete """

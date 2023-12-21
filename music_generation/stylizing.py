@@ -11,16 +11,16 @@ class PerformerWrapper:
 
         self.style_performer_path = style_performer_path
 
-        sys.path.insert(0, f"{style_performer_path}/src")
+        sys.path.insert(0, f"{style_performer_path}/src")  # TODO: некостыльный динамичный import
         from performance.performer import Performer
 
         self.performer_cls = Performer
         self.midi_style = midi_style
 
-    def stylize(self, mono_mid):
+    def stylize(self, mono_mid, voice_count):
         # Запускаем перенос стиля
         mono_mid_styled = []  # массив одноголосных миди со стилем
-        for i in range(len(mono_mid)):
+        for i in range(voice_count):
             mono_mid_styled.append(MidiFile())
             mono_mid_styled[i].ticks_per_beat = 120
             mono_mid_styled[i].type = 1
@@ -29,16 +29,16 @@ class PerformerWrapper:
         p = self.performer_cls()  # класс-фасад
         p.compile(f"{self.style_performer_path}/config/config_0025", 'config.json')  # загрузить конфигурацию
         style = MidiFile(self.midi_style)
-        for i in range(len(mono_mid)):
+        for i in range(voice_count):
             if len(mono_mid[i].tracks[0]) > 128:
-                print(f"Стилизация голоса {i + 1} из {len(mono_mid)}")
+                print(f"Стилизация голоса {i + 1} из {voice_count}")
                 mono_mid_styled[i] = p.style(mono_mid[i], style, A=30, B=1, stride=1, dt_max=0.0, verbose=1, timelimit=1200)  # стилизация
             else:
                 print(f"Голос {i} не поддается стилизации")
                 mono_mid_styled[i] = mono_mid[i]
 
         # Собираем все midi вместе в многоголосный трек
-        return merge_tracks(mono_mid_styled, len(mono_mid))
+        return merge_tracks(mono_mid_styled, voice_count)
 
 
 def merge_tracks(mid_array, voice_count):
@@ -104,7 +104,7 @@ def retime(time, ticks_per_beat_factor):
 
 def set_time_factor(tempo):
     """ Функция для задания нового масштаба времени по информации из трека """
-    global debug
+    # global debug
     ticks_per_beat_factor = tempo / 120.0
-    if debug: print("ticks_per_beat_factor=", ticks_per_beat_factor)
+    # if debug: print("ticks_per_beat_factor=", ticks_per_beat_factor)
     return ticks_per_beat_factor

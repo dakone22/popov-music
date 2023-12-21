@@ -4,6 +4,5 @@
 
 Перед началом работы:
 ```bash
-git clone --recursive https://latex.bmstu.ru/gitlab/hackathon2023/lab7.git
-make
+git clone --recursive https://latex.bmstu.ru/gitlab/hackathon2023/lab7.git && cd lab7 && make 
 ```

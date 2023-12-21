@@ -1,6 +1,6 @@
 # popov-music
 
-<img alt="bongo cat gif" src="bongo-cat-icegif-1.gif" width="512"/>
+<img alt="bongo cat gif" src="./bongo-cat-icegif-1.gif" width="512"/>
 
 Переделанный код (более чистый и удобный) для генерации музыки по практикуму.
 

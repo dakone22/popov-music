@@ -43,7 +43,6 @@ class PerformerWrapper:
 
 def merge_tracks(mid_array, voice_count):
     """ Функция для объединения треков в едином масштабе времени """
-    global debug
     # Объединение треков нескольких объектов MidFile в один трек
     # Запишем время события из каждого трека в dictionary, каждый элемент которого - массив сообщений в данный момент времени
     merged_track = defaultdict(list)
@@ -72,7 +71,7 @@ def merge_tracks(mid_array, voice_count):
     merged_mid = MidiFile()
     # Вычисляем масштаб для пересчета темпа
     ticks_per_beat_factor = set_time_factor(mid.ticks_per_beat)
-    if debug: print(f'Исходная композиция. Количество тиков в четверти: {mid.ticks_per_beat}')
+    # if debug: print(f'Исходная композиция. Количество тиков в четверти: {mid.ticks_per_beat}')
     # Темп всегда 120 ударов на целую ноту
     merged_mid.ticks_per_beat = 120
     # Создаем первый и единственный трек
@@ -80,7 +79,7 @@ def merge_tracks(mid_array, voice_count):
     time = 0  # Начальная метка времени
     # Для каждого момента времени в словаре (сортируем его по времени), записываем событие в midi.
     for moment in sorted(merged_track.keys()):
-        if debug: print(moment, ':', merged_track[moment])
+        # if debug: print(moment, ':', merged_track[moment])
         # Рассчитаем промежуток времени от предыдущего события
         delta_t = int(moment - time)
         # Перебираем все сообщения в текущем моменте времени

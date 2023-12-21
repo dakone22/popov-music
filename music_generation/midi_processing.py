@@ -9,7 +9,7 @@ from threading import Condition, Thread
 import pandas as pd
 from music21.converter import parse as music21_parse
 
-from chord_processing import ChordProcessor
+from .chord_processing import ChordProcessor
 
 
 def get_filtered_files(folder_path: Path, pattern: str) -> list[Path]:

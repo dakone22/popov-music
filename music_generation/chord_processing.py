@@ -1,4 +1,3 @@
-import binascii
 import itertools
 import pathlib
 import sys
